@@ -1,0 +1,4 @@
+LABEL localdisk
+MENU LABEL ^Boot local disk
+LOCALBOOT 0
+

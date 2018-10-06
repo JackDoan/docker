@@ -1,0 +1,62 @@
+version: "3.3"
+services:
+  dns:
+    image: jd-dnsmasq:latest
+    build:
+      context: ./dnsmasq
+      dockerfile: dnsmasq.dockerfile
+    cap_add:
+    - "NET_ADMIN"
+    network_mode: "host"
+    ports:
+    - target: 69 #tftp
+      published: 69
+      protocol: udp
+      mode: host
+    - target: 67 #dhcp
+      published: 67
+      protocol: udp
+      mode: host
+    volumes:
+    - type: bind
+      source: ./tftp-files
+      target: /srv/tftp
+      read_only: true
+  http-kick:
+    image: jd-http-kick:latest
+    build:
+      context: ./nginx
+      dockerfile: http-kick.dockerfile
+    ports:
+    - target: 80
+      published: 5123
+      protocol: tcp
+      mode: host
+    volumes:
+    - type: bind
+      source: /mnt/archiso
+      target: /usr/share/nginx/html/archiso
+      read_only: true
+    - type: bind
+      source: /mnt/centos
+      target: /usr/share/nginx/html/centos
+      read_only: true
+  deployo:
+    image: jd-deployo:latest
+    build:
+      context: ./deployo
+      dockerfile: flask.dockerfile
+    ports:
+    - target: 5000
+      published: 1337
+      protocol: tcp
+      mode: host
+    volumes:
+    - type: bind
+      source: ./tftp-files/pxelinux.cfg
+      target: /opt/pxelinux.cfg
+      read_only: false
+    - type: bind
+      source: ./tftp-files/machines
+      target: /opt/machines
+      read_only: false

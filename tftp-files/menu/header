@@ -1,0 +1,17 @@
+UI vesamenu.c32
+
+MENU TITLE Jack's Spicy Boot Menu
+MENU INCLUDE menu/graphics.conf
+MENU AUTOBOOT Starting Local System in # seconds
+
+INCLUDE menu/os/localdisk
+INCLUDE menu/os/centos
+INCLUDE menu/os/arch
+
+LABEL tools
+MENU LABEL ^Tools
+KERNEL vesamenu.c32
+APPEND menu/graphics.conf menu/tools.menu
+
+
+

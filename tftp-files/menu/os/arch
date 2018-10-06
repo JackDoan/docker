@@ -1,0 +1,7 @@
+LABEL arch
+MENU LABEL Boot Arch Linux (x86_64) (HTTP)
+LINUX http://${pxeserver}:5123/archiso/arch/boot/x86_64/vmlinuz
+INITRD http://${pxeserver}:5123/archiso/arch/boot/x86_64/archiso.img
+APPEND archisobasedir=arch archiso_http_srv=http://${pxeserver}:5123/archiso/
+SYSAPPEND 3
+
