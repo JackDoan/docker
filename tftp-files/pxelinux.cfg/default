@@ -1,5 +1,5 @@
-INCLUDE menu/header
-DEFAULT localdisk
+NCLUDE menu/header
+#DEFAULT localdisk
 TIMEOUT 100
 
 # Prompt the user. Set to '1' to automatically choose the default option. This

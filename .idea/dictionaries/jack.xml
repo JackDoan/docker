@@ -1,0 +1,27 @@
+<component name="ProjectDictionaryState">
+  <dictionary name="jack">
+    <words>
+      <w>autopart</w>
+      <w>baseurl</w>
+      <w>bootloader</w>
+      <w>bopis</w>
+      <w>clearpart</w>
+      <w>crontab</w>
+      <w>driveorder</w>
+      <w>enableshadow</w>
+      <w>firstboot</w>
+      <w>fstype</w>
+      <w>initlabel</w>
+      <w>iscrypted</w>
+      <w>kickstart</w>
+      <w>ksfile</w>
+      <w>nocore</w>
+      <w>nohome</w>
+      <w>noverifyssl</w>
+      <w>passalgo</w>
+      <w>pkgs</w>
+      <w>rootpw</w>
+      <w>zerombr</w>
+    </words>
+  </dictionary>
+</component>

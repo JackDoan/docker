@@ -1,6 +1,12 @@
+LABEL centos-remote
+MENU LABEL Auto-Install CentOS 7 Remote (x86_64)
+LINUX http://${pxeserver}:5123/centos/isolinux/vmlinuz
+INITRD http://${pxeserver}:5123/centos/isolinux/initrd.img
+APPEND method=http://mirror.centos.org/centos/7/os/x86_64/ inst.ks=http://10.0.0.2:5123/kick/centos/ks.cfg inst.text ip=dhcp
+
 LABEL centos
 MENU LABEL Auto-Install CentOS 7 (x86_64)
 LINUX http://${pxeserver}:5123/centos/isolinux/vmlinuz
 INITRD http://${pxeserver}:5123/centos/isolinux/initrd.img
-APPEND method=http://mirror.centos.org/centos/7/os/x86_64/ inst.ks=http://10.0.0.2:5123/centos-kick/ks.cfg inst.text ip=dhcp
+APPEND method=http://10.0.0.2/centos/7/os/x86_64/ inst.ks=http://10.0.0.2:5123/kick/centos/ks.cfg inst.text ip=dhcp
 
