@@ -1,4 +1,4 @@
-NCLUDE menu/header
+INCLUDE menu/header
 #DEFAULT localdisk
 TIMEOUT 100
 

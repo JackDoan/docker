@@ -1,0 +1,9 @@
+---
+- name: Copy the portainer stack file to master
+  copy:
+    src: portainer-stack.yml
+    dest: /root/portainer-stack.yml
+
+- name: Deploy portainer stack
+  shell: docker stack deploy -c /root/portainer-stack.yml portainer
+

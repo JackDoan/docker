@@ -1,0 +1,14 @@
+---
+
+- name: "Provision a Docker Swarm cluster"
+  hosts: all
+  remote_user: root
+  roles:
+    - common
+    - docker-host
+
+- name: "Deploy portainer"
+  hosts: portainer_master
+  remote_user: root
+  roles:
+    - portainer

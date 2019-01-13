@@ -12,9 +12,9 @@ services:
     build:
       context: ./dnsmasq
       dockerfile: dnsmasq.dockerfile
-#    cap_add:
-#    - "NET_ADMIN"
-#    network_mode: "host"
+    cap_add:
+    - "NET_ADMIN"
+    network_mode: "host"
     entrypoint: ["dnsmasq", "-k", "--log-facility=-", "--conf-file=/dnsmasq.conf", "--user=root"]
     ports:
     - target: 69 #tftp
@@ -30,26 +30,26 @@ services:
       target: /tftp/bios/pxelinux.cfg/default
     - source: dnsmasq-conf
       target: /dnsmasq.conf
-#  http-kick:
-#    image: nginx:mainline-alpine
-#    ports:
-#    - target: 80
-#      published: 5123
-#      protocol: tcp
-#      mode: host
-#    volumes:
-#    - type: bind
-#      source: ./webroot
-#      target: /usr/share/nginx/html/kick
-#      read_only: true
-#    - type: bind
-#      source: /mnt/archiso
-#      target: /usr/share/nginx/html/archiso
-#      read_only: true
-#    - type: bind
-#      source: /mnt/centos
-#      target: /usr/share/nginx/html/centos
-#      read_only: true
+  http-kick:
+    image: nginx:mainline-alpine
+    ports:
+    - target: 80
+      published: 5123
+      protocol: tcp
+      mode: host
+    volumes:
+    - type: bind
+      source: ./webroot
+      target: /usr/share/nginx/html/kick
+      read_only: true
+    - type: bind
+      source: /mnt/archiso
+      target: /usr/share/nginx/html/archiso
+      read_only: true
+    - type: bind
+      source: /mnt/centos
+      target: /usr/share/nginx/html/centos
+      read_only: true
 #  deployo:
 #    image: jd-deployo:latest
 #    build:
