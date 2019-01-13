@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Docker Published Ports</short>
+  <description>Docker services are assigned published ports in the range 30000 to 32767 by swarm managers, if they do not specify a port. Docker swarm ingress load balancing will route incoming connections on these ports to service containers. See https://docs.docker.com/engine/swarm/key-concepts/ for details.</description>
+  <port protocol="tcp" port="30000-32767"/>
+</service>

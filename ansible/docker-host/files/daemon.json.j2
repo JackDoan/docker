@@ -1,0 +1,7 @@
+{% set dockerd_vars = {} %}
+{% for k, v in vars.items() -%}
+    {% if k.startswith('dockerd_') -%}
+        {{ dockerd_vars.update({k[8:].replace('_', '-'): v}) }}
+    {%- endif %}
+{%- endfor %}
+{{ dockerd_vars | to_nice_json }}

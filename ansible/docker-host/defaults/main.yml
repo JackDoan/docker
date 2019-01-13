@@ -1,0 +1,25 @@
+docker_edition: 'docker-ce'
+docker_ce_variant: 'stable'
+
+docker_yum_repo: "https://download.docker.com/linux/centos/7/$basearch/stable"
+docker_yum_gpgkey: "https://download.docker.com/linux/centos/gpg"
+
+docker_certs_dir: '/etc/docker/certs.d'
+docker_tlscacert: 'files/certs/ca.pem'
+docker_tlscert: "files/certs/{{ ansible_hostname }}.pem"
+docker_tlskey: "files/certs/{{ ansible_hostname }}-cert.pem"
+
+enable_remote_api: true
+enable_swarm_overlay_networks: true
+enable_swarm_service_ports: true
+enable_swarm_manager_ports: true
+
+dockerd_disable_legacy_registry: true
+
+# You can set any interface, that is listened by docker engine.
+# e.g. docker_swarm_interface: "eth1"
+docker_swarm_interface: "{{ ansible_default_ipv4['interface'] }}"
+docker_swarm_addr: "{{ hostvars[inventory_hostname]['ansible_' + docker_swarm_interface]['ipv4']['address'] }}"
+docker_swarm_port: 2377
+
+skip_swarm: False  # if true, skip the swarm setup

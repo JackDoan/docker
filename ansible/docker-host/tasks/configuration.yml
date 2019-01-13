@@ -1,0 +1,23 @@
+# See https://docs.docker.com/engine/reference/commandline/dockerd/ for options
+- name: Set Docker sockets to connect to
+  set_fact:
+    dockerd_hosts:
+      - unix:///var/run/docker.sock
+      - tcp://0.0.0.0:2376
+  when: enable_remote_api and dockerd_hosts is undefined
+
+- name: Ensure /etc/docker directory exists
+  file:
+    path: /etc/docker
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Generate Docker daemon configuration file
+  template:
+    src: files/daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0600

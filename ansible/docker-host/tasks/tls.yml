@@ -1,0 +1,49 @@
+- name: Ensure certificates directory exists
+  file:
+    path: "{{ docker_certs_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when: docker_tlscacert != None or
+        docker_tlscert != None or
+        docker_tlskey != None
+
+- name: Copy TLS certificate files to hosts
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0400
+  with_items:
+    - src: "{{ docker_tlscacert }}"
+      dest: "{{ docker_certs_dir}}/ca.pem"
+    - src: "{{ docker_tlscert }}"
+      dest: "{{ docker_certs_dir}}/cert.pem"
+    - src: "{{ docker_tlskey }}"
+      dest: "{{ docker_certs_dir}}/key.pem"
+  when: item.src != None
+
+- name: Set TLS certificate files daemon options
+  set_fact:
+    "{{ item.option }}": "{{ item.dest }}"
+  with_items:
+    - src: "{{ docker_tlscacert }}"
+      option: dockerd_tlscacert
+      dest: "{{ docker_certs_dir}}/ca.pem"
+    - src: "{{ docker_tlscert }}"
+      option: dockerd_tlscert
+      dest: "{{ docker_certs_dir}}/cert.pem"
+    - src: "{{ docker_tlskey }}"
+      option: dockerd_tlskey
+      dest: "{{ docker_certs_dir}}/key.pem"
+  when: item.src != None
+
+- name: Enable tls and tlsverify daemon options
+  set_fact:
+    dockerd_tls: true
+    dockerd_tlsverify: true
+  when: docker_tlscacert != None or
+        docker_tlscert != None or
+        docker_tlskey != None

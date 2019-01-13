@@ -1,0 +1,18 @@
+- include: engine.yml
+
+- include: tls.yml
+
+- include: firewalld.yml
+
+- include: configuration.yml
+
+- name: Enable the Docker daemon as a service and start it.
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+# Setup the Docker Swarm Cluster
+- include: swarm_cluster.yml
+  when: not skip_swarm
+

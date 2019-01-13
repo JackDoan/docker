@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Docker Engine</short>
+  <description>The Docker daemon ports provide access to a Docker engine using the Docker API. 2375/tcp is unauthenticated. 2376/tcp will only allow connections from clients authenticated by a certificate sign by the configured CA.</description>
+  <port protocol="tcp" port="2375"/>
+  <port protocol="tcp" port="2376"/>
+</service>

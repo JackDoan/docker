@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Docker Swarm Manager</short>
+  <description>Doker swarm managers schedule services and tasks across multiple Docker engines.</description>
+  <port protocol="tcp" port="2377"/>
+</service>

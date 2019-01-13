@@ -1,0 +1,40 @@
+# Refer to https://docs.docker.com/engine/installation/linux/rhel/
+# and https://docs.docker.com/engine/installation/linux/centos/
+
+- name: Install yum-utils, pip, and other dependencies.
+  yum:
+    name:
+      - epel-release
+      - python-pip
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+
+- name: Add the YUM Docker repository.
+  yum_repository:
+    name: docker
+    description: Docker Repository
+    baseurl: "{{ docker_yum_repo }}"
+    gpgkey: "{{ docker_yum_gpgkey }}"
+    gpgcheck: yes
+
+- name: Install the Docker engine
+  yum:
+    name: "{{ docker_edition }}"
+    state: present
+    update_cache: yes
+
+- name: Install docker-py
+  pip:
+    name:
+      - docker-py
+      - docker
+    state: absent
+
+- name: Install docker-py
+  pip:
+    name:
+      - docker
+      - docker-compose
+    state: present

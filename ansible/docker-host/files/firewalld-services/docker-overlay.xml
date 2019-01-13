@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Docker Overlay Networking</short>
+  <description>Docker overlay networks enable communication over multiple Docker hosts. 4789/udp is the data plane (VXLAN). 7946/tcp and 7946/udp are the control plane. See https://docs.docker.com/engine/userguide/networking/ for details.</description>
+  <port protocol="udp" port="4789"/>
+  <port protocol="tcp" port="7946"/>
+  <port protocol="udp" port="7946"/>
+</service>

@@ -1,0 +1,29 @@
+- name: Copy Docker firewalld services to hosts
+  copy:
+    src: files/firewalld-services/
+    dest: /etc/firewalld/services/
+    owner: root
+    group: root
+    mode: 0440
+
+- name: Set firewalld services
+  firewalld:
+    service: "{{ item.service }}"
+    state: "{{ 'enabled' if item.state else 'disabled' }}"
+    permanent: true
+  with_items:
+    - service: docker-engine
+      state: "{{ enable_remote_api }}"
+    - service: docker-overlay
+      state: "{{ enable_swarm_overlay_networks }}"
+    - service: docker-publish
+      state: "{{ enable_swarm_service_ports }}"
+    - service: docker-swarm
+      state: "{{ enable_swarm_manager_ports }}"
+
+- name: Set masquerade on public zone
+  firewalld:
+    zone: public
+    masquerade: yes
+    state: enabled
+    permanent: true
