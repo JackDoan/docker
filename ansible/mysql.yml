@@ -1,0 +1,7 @@
+---
+
+- name: "Deploy mysql"
+  hosts: portainer_master
+  remote_user: root
+  roles:
+    - mysql-replica

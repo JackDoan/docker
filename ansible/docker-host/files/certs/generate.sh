@@ -2,10 +2,10 @@ do_cert () {
     SERVER="$1"
     IP="$2"
 
-    openssl genrsa -out "$SERVER".pem 4096
+    openssl genrsa -out "$SERVER"-key.pem 4096
 
     openssl req -subj '/CN="$SERVER".foxglen.jackdoan.com' \
-    -sha256 -new -key "$SERVER".pem \
+    -sha256 -new -key "$SERVER"-key.pem \
     -out "$SERVER".csr
 
     echo "subjectAltName = IP:$IP,IP:127.0.0.1" > $SERVER.extfile
@@ -15,7 +15,7 @@ do_cert () {
     -CA ca.pem \
     -CAkey ca-key.pem \
     -CAcreateserial \
-    -out "$SERVER"-cert.pem \
+    -out "$SERVER".pem \
     -extfile $SERVER.extfile
 }
 

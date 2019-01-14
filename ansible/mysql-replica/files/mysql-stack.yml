@@ -1,0 +1,141 @@
+version: "3.7"
+###Innodb Group Replication
+#inspired by https://mysqlhighavailability.com/setting-up-mysql-group-replication-with-mysql-docker-images/
+
+networks:
+  net:
+    driver: overlay
+    attachable: true
+
+volumes:
+  sql_data1:
+  sql_data2:
+  sql_data3:
+
+configs:
+  my-cnf:
+    file: ./my.cnf
+  proxysql-cnf:
+    file: ./proxysql.cnf
+  proxysql-user:
+    file: ./proxysql_user.sql
+  gr-master-init:
+    file: ./group_repl_master.sql
+  gr-user-init:
+    file: ./group_repl_user.sql
+  start-group-repl:
+    file: ./99-start-group-repl.sh
+
+x-mysql: &sql_service
+  image: mysql/mysql-server:5.7
+  networks: [ "net" ]
+  #  ports:
+  #    #- "3306:3306"
+  #    - "33061:33061"
+
+  environment:
+    MYSQL_ROOT_HOST: '%'
+    MYSQL_ROOT_PASSWORD: 'password'
+    MYSQL_LOG_CONSOLE: 'true'
+  deploy:
+    mode: replicated
+    replicas: 1
+    endpoint_mode: dnsrr
+
+services:
+  #docker run -d -v /path/to/proxysql.cnf:/etc/proxysql.cnf severalnines/proxysql
+  proxysql:
+    image: severalnines/proxysql
+    networks: [ "net" ]
+    ports:
+      - "6032:6032"
+      - "3306:6033"
+      - "6080:6080"
+    configs:
+      - source: proxysql-cnf
+        target: /etc/proxysql.cnf
+    deploy:
+      mode: replicated
+      replicas: 1
+
+
+
+  mysql1:
+    <<: *sql_service
+    ports:
+      - "3307:3306"
+    command:
+      - "--server-id=1"
+      - "--group-replication-local-address=tasks.mysql1:33061"
+      - "--log-bin=mysql-bin-1.log"
+    configs:
+      - source: my-cnf
+        target: /etc/my.cnf
+      - source: proxysql-user
+        target: /docker-entrypoint-initdb.d/01-proxysql-user.sql
+      - source: gr-user-init
+        target: /docker-entrypoint-initdb.d/01-gr-user-init.sql
+      - source: start-group-repl
+        target: /docker-entrypoint-initdb.d/99-start-group-repl.sh
+        mode: 0555
+      - source: gr-master-init
+        target: /docker-entrypoint-initdb.d/01-gr-master-init.sql
+#    volumes:
+#      - sql_data1:/var/lib/mysql
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        preferences:
+          - spread: node.labels.sql == 1
+
+  mysql2:
+    <<: *sql_service
+    ports:
+      - "3308:3306"
+    configs:
+      - source: my-cnf
+        target: /etc/my.cnf
+      - source: proxysql-user
+        target: /docker-entrypoint-initdb.d/01-proxysql-user.sql
+      - source: gr-user-init
+        target: /docker-entrypoint-initdb.d/01-gr-user-init.sql
+      - source: start-group-repl
+        target: /docker-entrypoint-initdb.d/99-start-group-repl.sh
+        mode: 0555
+    command:
+      - "--server-id=2"
+      - "--group-replication-local-address=tasks.mysql2:33061"
+      - "--log-bin=mysql-bin-1.log"
+#    volumes:
+#      - sql_data2:/var/lib/mysql
+    deploy:
+      placement:
+        preferences:
+          - spread: node.labels.sql == 2
+
+  mysql3:
+    <<: *sql_service
+    ports:
+      - "3309:3306"
+    configs:
+      - source: my-cnf
+        target: /etc/my.cnf
+      - source: proxysql-user
+        target: /docker-entrypoint-initdb.d/01-proxysql-user.sql
+      - source: gr-user-init
+        target: /docker-entrypoint-initdb.d/01-gr-user-init.sql
+      - source: start-group-repl
+        target: /docker-entrypoint-initdb.d/99-start-group-repl.sh
+        mode: 0555
+    command:
+      - "--server-id=3"
+      - "--group-replication-local-address=tasks.mysql3:33061"
+      - "--log-bin=mysql-bin-1.log"
+#    volumes:
+#      - sql_data3:/var/lib/mysql
+    deploy:
+      placement:
+        preferences:
+          - spread: node.labels.sql == 3
+

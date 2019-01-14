@@ -1,0 +1,27 @@
+---
+- name: Erase mysql stack
+  ignore_errors: yes
+  shell: docker stack rm mysql
+  args:
+    chdir: "/root"
+
+- name: Copy the stack files to master
+  copy:
+    src: "{{ item }}"
+    dest: "/root/{{ item }}"
+  with_items:
+    - 99-start-group-repl.sh
+    - group_repl_master.sql
+    - group_repl_user.sql
+    - my.cnf
+    - mysql-stack.yml
+    - proxysql.cnf
+    - proxysql_user.sql
+
+
+
+- name: Deploy mysql stack
+  shell: docker stack deploy -c /root/mysql-stack.yml mysql
+  args:
+    chdir: "/root"
+

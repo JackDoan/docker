@@ -7,7 +7,7 @@ docker_yum_gpgkey: "https://download.docker.com/linux/centos/gpg"
 docker_certs_dir: '/etc/docker/certs.d'
 docker_tlscacert: 'files/certs/ca.pem'
 docker_tlscert: "files/certs/{{ ansible_hostname }}.pem"
-docker_tlskey: "files/certs/{{ ansible_hostname }}-cert.pem"
+docker_tlskey: "files/certs/{{ ansible_hostname }}-key.pem"
 
 enable_remote_api: true
 enable_swarm_overlay_networks: true

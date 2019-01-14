@@ -1,10 +1,10 @@
 [portainer_master]
 manager1.foxglen.jackdoan.com
 
-
 [docker_swarm_manager]
-manager1.foxglen.jackdoan.com swarm_labels=deploy
+manager1.foxglen.jackdoan.com swarm_labels=deploy,sql=1
 
 [docker_swarm_worker]
-node1.foxglen.jackdoan.com swarm_labels=deploy
-node2.foxglen.jackdoan.com swarm_labels=deploy
+node1.foxglen.jackdoan.com swarm_labels=deploy,sql=2
+node2.foxglen.jackdoan.com swarm_labels=deploy,sql=3
+

@@ -6,10 +6,13 @@
 
 - include: configuration.yml
 
+- name: Reload systemd
+  shell: systemctl daemon-reload
+
 - name: Enable the Docker daemon as a service and start it.
   service:
     name: docker
-    state: started
+    state: restarted
     enabled: yes
 
 # Setup the Docker Swarm Cluster

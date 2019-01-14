@@ -14,6 +14,16 @@
     group: root
     mode: 0700
 
+- name: create systemd override directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+- name: add systemd override
+  copy:
+    src: docker.override.conf
+    dest: /etc/systemd/system/docker.service.d/override.conf
+
 - name: Generate Docker daemon configuration file
   template:
     src: files/daemon.json.j2
